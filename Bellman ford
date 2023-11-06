@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+
+using namespace std;
+
+struct Edge {
+    int src, dest, weight;
+};
+
+void bellmanFord(vector<Edge>& edges, int V, int E, int src) {
+    vector<int> dist(V, INT_MAX);
+    dist[src] = 0;
+
+    for (int i = 1; i < V; i++) {
+        bool anyChanges = false;
+        for (int j = 0; j < E; j++) {
+            int u = edges[j].src;
+            int v = edges[j].dest;
+            int weight = edges[j].weight;
+            if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+                anyChanges = true;
+            }
+        }
+
+        cout << "Iteration " << i << ": "<<endl;
+       // cout<<"Vertex " << " Distance: " <<endl;
+        for (int k = 0; k < V; k++) {
+            cout <<  k <<":" << dist[k] <<" ";
+        }
+        cout << endl;
+
+        // If no changes occurred in this iteration, the algorithm has converged.
+        if (!anyChanges) {
+            break;
+        }
+    }
+
+    // Check for negative-weight cycles
+    for (int j = 0; j < E; j++) {
+        int u = edges[j].src;
+        int v = edges[j].dest;
+        int weight = edges[j].weight;
+        if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+            cout << "Graph contains a negative-weight cycle." << endl;
+            return;
+        }
+    }
+
+    // Print the final shortest distances
+    cout << endl<<"Final Vertex Distance from Source:" << endl;
+    for (int i = 0; i < V; i++) {
+        cout << "Vertex " << i << " Distance: " << dist[i] << endl;
+    }
+}
+
+int main() {
+    int V, E;
+    cout << "Enter the number of vertices: ";
+    cin >> V;
+    cout << "Enter the number of edges: ";
+    cin >> E;
+
+    vector<Edge> edges(E);
+    for (int i = 0; i < E; i++) {
+        cout << "Enter edge " << i + 1 << " details (source, destination, weight): ";
+        cin >> edges[i].src >> edges[i].dest >> edges[i].weight;
+    }
+
+    int source;
+    cout << "Enter the source vertex: ";
+    cin >> source;
+
+    bellmanFord(edges, V, E, source);
+
+    return 0;
+}
+
