@@ -77,3 +77,19 @@ int main() {
     return 0;
 }
 
+/* output
+Enter the number of vertices: 6
+Enter the number of edges: 9
+0 1 6
+0 2 4
+0 3 5
+1 4 -1
+2 1 -2
+2 4 3
+3 2 -2
+3 5 -1
+4 5 3
+
+Enter the source vertex: 0
+
+*/
